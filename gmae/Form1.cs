@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace gmae
@@ -6,8 +7,8 @@ namespace gmae
     public partial class Form1 : Form
     {
         private EquipmentFactory equipmentFactory = new EquipmentFactory();
-        private Player1 player1 = new Player1();
-        private Player2 player2 = new Player2();
+        private 成龍 player1 = new 成龍();
+        private 李連杰 player2 = new 李連杰();
 
         public Form1()
         {

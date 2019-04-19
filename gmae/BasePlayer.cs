@@ -75,7 +75,7 @@ namespace gmae
         }
     }
 
-    public class Player1 : BasePlayer, IDefense
+    public class 成龍 : BasePlayer, IDefense
     {
         public override string Name => "成龍";
         public override int Power => 10;
@@ -83,21 +83,24 @@ namespace gmae
 
         public int DefenseValue { get; set; }
 
-        public Player1()
+        public 成龍()
         {
             this.Hp = 200;
         }
 
-        public void EqipmentArmor(BaseArmor armor) => DefenseValue = armor.DefenseValue;
+        public void EqipmentArmor(BaseArmor armor)
+        {
+            DefenseValue = armor.DefenseValue;
+        }
     }
 
-    public class Player2 : BasePlayer
+    public class 李連杰 : BasePlayer
     {
         public override string Name => "李連杰";
         public override int Power => 8;
         public override int Hp { get; set; }
 
-        public Player2()
+        public 李連杰()
         {
             this.Hp = 220;
         }
