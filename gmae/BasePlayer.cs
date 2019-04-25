@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gmae.Interface;
+using System;
 using System.Windows.Forms;
 
 namespace gmae
@@ -15,7 +16,7 @@ namespace gmae
 
         public BaseWeapon Weapon { private set; get; }
 
-        public Action<int, BaseWeapon> 每次攻擊的委派 { set; get; }
+        public Action<AttactOTD, BaseWeapon> 每次攻擊的委派 { set; get; }
 
         public Action 當Hp是0的委派 { set; get; }
 
@@ -40,24 +41,53 @@ namespace gmae
 
         private void AttactTrigger(BasePlayer targetPlayer)
         {
-            var attactValue = GetRandomAttactValueWithWeapon();
+            var attactValue = GetAttactOTDWithWeapon();
             targetPlayer.遭受攻擊(attactValue);
 
-            if (每次攻擊的委派 != null)
-                每次攻擊的委派(attactValue, this.Weapon);
+            每次攻擊的委派?.Invoke(attactValue, this.Weapon);
         }
 
-        private int GetRandomAttactValueWithWeapon()
+        private AttactOTD GetAttactOTDWithWeapon()
         {
-            return this.Weapon == null ? Power : Power + this.Weapon.RandomAttactValue();
+            if (this.Weapon == null)
+            {
+                var attactOtd = new AttactOTD();
+                attactOtd.AttactValue = Power;
+                attactOtd.Attribute = AttactAttribute.無;
+                attactOtd.IsLunch = false;
+                return attactOtd;
+            }
+            else
+            {
+                return GetAtttributeWeaponAttactOTD();
+            }
         }
 
-        public void 遭受攻擊(int attact)
+        private AttactOTD GetAtttributeWeaponAttactOTD()
+        {
+            var attactOtd = new AttactOTD();
+            attactOtd.AttactValue = Power + this.Weapon.RandomAttactValue();
+            var AtttributeWeapon = this.Weapon as ISetWeaponAttribute;
+            if (AtttributeWeapon != null)
+            {
+                attactOtd.Attribute = AtttributeWeapon.HasAttribute
+                    ? AtttributeWeapon.WeaponAttribute.Attribute : AttactAttribute.無;
+            }
+            else
+            {
+                attactOtd.Attribute = AttactAttribute.無;
+            }
+            attactOtd.IsLunch = true;
+
+            return attactOtd;
+        }
+
+        public void 遭受攻擊(AttactOTD attact)
         {
             if (this is IDefense)
-                this.Hp -= attact - (this as IDefense).DefenseValue;
+                this.Hp -= attact.AttactValue - (this as IDefense).DefenseValue;
             else
-                this.Hp -= attact;
+                this.Hp -= attact.AttactValue;
 
             if (this.Hp <= 0)
                 WenDead();

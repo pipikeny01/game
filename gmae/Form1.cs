@@ -24,7 +24,7 @@ namespace gmae
             player1.每次攻擊的委派 += (attactValue, weapon) =>
             {
                 Player1Status();
-                txtPlayer1Log.Text += $"{player1.Name}拿著{weapon.WeaponName}發動攻擊造成傷害:{ attactValue}{Environment.NewLine}";
+                AttactLog(txtPlayer1Log,player1, attactValue, weapon);
             };
 
             player1.當Hp是0的委派 += () =>
@@ -36,7 +36,7 @@ namespace gmae
             player2.每次攻擊的委派 += (attactValue, weapon) =>
             {
                 Player2Status();
-                txtPlayer2Log.Text += $"{player2.Name}拿著{weapon.WeaponName}發動攻擊造成傷害:{ attactValue}{Environment.NewLine}";
+                AttactLog(txtPlayer2Log,player2, attactValue, weapon);
             };
 
             player2.當Hp是0的委派 += () =>
@@ -44,6 +44,11 @@ namespace gmae
                 player1.StopAttact();
                 txtPlayer2Log.Text += $"{player2.Name}輸了";
             };
+        }
+
+        private void AttactLog(TextBox txtPlayerLog,BasePlayer player, AttactOTD attactValue, BaseWeapon weapon)
+        {
+            txtPlayerLog.Text += $"{player.Name}拿著{weapon.WeaponName}發動{attactValue.Attribute}攻擊造成傷害:{ attactValue.AttactValue}{Environment.NewLine}";
         }
 
         private void Player2Status()
